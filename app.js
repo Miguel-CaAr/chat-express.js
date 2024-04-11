@@ -3,9 +3,13 @@ import logger from "morgan";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
 import dotenv from "dotenv";
-import { SQLite } from "./src/repositories/SQLite/messageRepository.js";
-import { SocketController } from "./src/controllers/socketController.js";
+import { SQLite as SQLite_Messages } from "./src/repositories/SQLite/messageRepository.js";
+import { SQLite as SQLite_Users } from "./src/repositories/SQLite/userRepository.js";
+import { CreateTables } from "./src/repositories/SQLite/tablesRepository.js";
+import { TablesUseCase } from "./src/use-cases/tables.useCase.js";
+import { UsersUseCase } from "./src/use-cases/users.userCase.js";
 import { MessageUseCase } from "./src/use-cases/message.useCase.js";
+import { SocketController } from "./src/controllers/socketController.js";
 
 dotenv.config();
 const port = process.env.PORT ?? 3000;
@@ -16,9 +20,16 @@ const io = new Server(server, {
   connectionStateRecovery: {},
 });
 
-const messageRepository = new SQLite();
+//Repositories
+const tablesRepository = new CreateTables();
+const usersRepository = new SQLite_Users();
+const messageRepository = new SQLite_Messages();
+//Use cases
+const tablesUseCase = new TablesUseCase(tablesRepository);
+const usersUseCase = new UsersUseCase(usersRepository);
 const messageUseCase = new MessageUseCase(messageRepository);
-const socketController = new SocketController(io, messageUseCase);
+//Controller
+const socketController = new SocketController(io,tablesUseCase, usersUseCase, messageUseCase);
 socketController.initialize();
 
 app.use(logger("dev"));

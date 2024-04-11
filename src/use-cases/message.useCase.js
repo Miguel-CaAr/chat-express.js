@@ -5,8 +5,8 @@ export class MessageUseCase {
     this.messageRepository = messageRepository;
   }
 
-  async createMessage(content) {
-    const message = new Message(null, content);
+  async createMessage(content, user) {
+    const message = new Message(null, content, user);
     return await this.messageRepository.create(message);
   }
 

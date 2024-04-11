@@ -1,5 +1,5 @@
 import { createClient } from "@libsql/client";
-import { Message } from "../../entities/message.js";
+import { User } from "../../entities/user.js";
 
 export class SQLite {
   constructor() {
@@ -9,19 +9,19 @@ export class SQLite {
     });
   }
 
-  async create(message) {
+  async create(user) {
     const result = await this.db.execute({
-      sql: "INSERT INTO messages (content, user) VALUES (:msg, :user)",
-      args: { msg: message.content, user: message.user },
+      sql: "INSERT INTO users (name, picture) VALUES (:name, :picture)",
+      args: { name: user.name, picture: user.picture },
     });
     return result.lastInsertRowid;
   }
 
   async getAllById(id) {
     const result = await this.db.execute({
-      sql: "SELECT * FROM messages WHERE id > ?",
+      sql: "SELECT * FROM users WHERE id > ?",
       args: [id],
     });
-    return result.rows.map((row) => new Message(row.id, row.content));
+    return result.rows.map((row) => new User(row.id, row.name, row.picture));
   }
 }
