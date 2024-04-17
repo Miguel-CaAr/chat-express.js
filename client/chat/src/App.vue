@@ -3,7 +3,7 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <main class="h-dvh flex justify-center items-center">
+  <main class="h-dvh flex justify-center items-center z-0">
     <div class="background-container">
       <div class="stars"></div>
       <div class="twinkling"></div>

@@ -1,7 +1,8 @@
 export class User {
-  constructor(id, name, picture) {
+  constructor(id, name, picture, password) {
     this.id = id;
     this.name = name;
-    this.picture = picturel;
+    this.picture = picture;
+    this.password = password
   }
 }

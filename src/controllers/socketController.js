@@ -10,17 +10,18 @@ export class SocketController {
 
   initialize() {
     this.io.on("connection", async (socket) => {
-      console.log("An user has connected");
+      console.log("🟢 An user has connected");
 
       //Manejo de eventos de desconeccion
       socket.on("disconnect", () => {
-        console.log("An user has disconnected");
+        console.log("🔴 An user has disconnected");
       });
 
       //Creamos las tablas en caso de no estar creadas anteriormente
       try {
         this.tablesUseCase.createTableUsers();
         this.tablesUseCase.createTableMessages();
+        this.tablesUseCase.createTableUsers();
       } catch (error) {
         console.error(
           "Ocurrio el siguiente error al intentar manejar la solicitud 'Crear Tablas' => ",
@@ -29,10 +30,11 @@ export class SocketController {
       }
 
       //Manejo de solicitudes para crear el usuario
-      socket.on("create user", async (name, picture) => {
+      socket.on("create user", async (name, picture, password) => {
         try {
-          const userId = await this.tablesUseCase.usersUseCase.createUser(name, picture);
+          const userId = await this.usersUseCase.createUser(name, picture, password);
           this.io.emit("create user", name, picture, userId.toString());
+          console.log("🙎‍♂️ User created");
         } catch (error) {
           console.error(
             "Ocurrio el siguiente error al intentar manejar la solicitud 'create user' => ",
@@ -40,12 +42,13 @@ export class SocketController {
           );
         }
       });
-
+      
       //Manejo de solicitudes para crear mensaje
       socket.on("chat message", async (content, userId) => {
         try {
           const messageId = await this.messageUseCase.createMessage(content, userId);
           this.io.emit("chat message", content, messageId.toString(), userId.toString());
+          console.log("📩 Message created");
         } catch (error) {
           console.error(
             "Ocurrio el siguiente error al intentar manejar la solicitud 'chat message' => ",

@@ -11,8 +11,8 @@ export class SQLite {
 
   async create(user) {
     const result = await this.db.execute({
-      sql: "INSERT INTO users (name, picture) VALUES (:name, :picture)",
-      args: { name: user.name, picture: user.picture },
+      sql: "INSERT INTO users (name, picture, password) VALUES (:name, :picture, :password)",
+      args: { name: user.name, picture: user.picture, password: user.password },
     });
     return result.lastInsertRowid;
   }

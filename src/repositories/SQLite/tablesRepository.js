@@ -14,6 +14,7 @@ export class CreateTables {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
         picture TEXT,
+        password TEXT
       )
     `);
   }
@@ -23,7 +24,7 @@ export class CreateTables {
       CREATE TABLE IF NOT EXISTS messages(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         content TEXT,
-        user INTEGER,
+        user INTEGER
       )
     `);
   }

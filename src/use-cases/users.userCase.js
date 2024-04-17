@@ -5,8 +5,8 @@ export class UsersUseCase {
     this.usersRepository = usersRepository;
   }
 
-  async createUser(name, picture) {
-    const user = new User(null, name, picture);
+  async createUser(name, picture, password) {
+    const user = new User(null, name, picture, password);
     return await this.usersRepository.create(user);
   }
 

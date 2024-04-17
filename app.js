@@ -1,8 +1,8 @@
 import express from "express";
+import dotenv from "dotenv";
 import logger from "morgan";
 import { Server } from "socket.io";
 import { createServer } from "node:http";
-import dotenv from "dotenv";
 import { SQLite as SQLite_Messages } from "./src/repositories/SQLite/messageRepository.js";
 import { SQLite as SQLite_Users } from "./src/repositories/SQLite/userRepository.js";
 import { CreateTables } from "./src/repositories/SQLite/tablesRepository.js";
@@ -17,6 +17,10 @@ const port = process.env.PORT ?? 3000;
 const app = express();
 const server = createServer(app);
 const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"]
+  },
   connectionStateRecovery: {},
 });
 
