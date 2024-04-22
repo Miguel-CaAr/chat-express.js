@@ -22,6 +22,6 @@ export class SQLite {
       sql: "SELECT * FROM messages WHERE id > ?",
       args: [id],
     });
-    return result.rows.map((row) => new Message(row.id, row.content));
+    return result.rows.map((row) => new Message(row.id, row.content, row.user));
   }
 }

@@ -51,7 +51,11 @@ export class SocketController {
           console.log("📩 Message created");
         } catch (error) {
           console.error(
-            "Ocurrio el siguiente error al intentar manejar la solicitud 'chat message' => ",
+            `Ocurrio el siguiente error al intentar manejar la solicitud 'chat message' =>
+            \ncontent: ${typeof content}
+            \nmessageId: ${typeof messageId}
+            \nuserId: ${typeof userId}\n
+            `,
             error
           );
         }
@@ -64,12 +68,13 @@ export class SocketController {
           const messages = await this.messageUseCase.getMessagesById(
             lastMessageId
           );
-          messages.forEach(({ id, content, userId }) => {
-            socket.emit("chat message", content, id.toString(), userId.toString());
+          messages.forEach(({ id, content, user }) => {
+            socket.emit("chat message", content, id.toString(), user.toString());
           });
         } catch (error) {
           console.error(
-            "Ocurrio el siguiente error al intentar recuperar los mensajes => ",
+          `Ocurrio el siguiente error al intentar recuperar los mensajes => 
+          \ncontent: ${typeof content}\nid: ${typeof id}\nuser:${typeof user}\n`,
             error
           );
         }
