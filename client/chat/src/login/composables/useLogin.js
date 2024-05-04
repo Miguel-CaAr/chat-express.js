@@ -24,6 +24,8 @@ const { notification, message } = createDiscreteApi(
 const isUser = (router) => {
   if (localStorage.getItem("userAuth") != null) {
     router.push("/lobby");
+  } else {
+    router.push("/");
   }
 };
 
@@ -34,8 +36,8 @@ const login = (router) => {
     socket.on("create user", (name, picture, id) => {
       userAuth.id = id;
       localStorage.setItem("userAuth", JSON.stringify(userAuth));
+      router.push("/lobby");
     });
-    router.push("/lobby");
   } catch (error) {
     if (error.type) {
       notification.create({

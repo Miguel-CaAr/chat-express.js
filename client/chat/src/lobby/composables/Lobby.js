@@ -6,6 +6,7 @@ import useLoginStore from "../../login/store/LoginStore.js";
 const { userAuth } = useLoginStore();
 
 const getMessages = (container) => {
+  socket.emit("get all messages");
   socket.on("chat message", (msg, serverOffset) => {
     const message = `<li>${msg}</li>`;
     container.value.insertAdjacentHTML("beforeend", message);

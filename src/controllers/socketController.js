@@ -32,7 +32,11 @@ export class SocketController {
       //Manejo de solicitudes para crear el usuario
       socket.on("create user", async (name, picture, password) => {
         try {
-          const userId = await this.usersUseCase.createUser(name, picture, password);
+          const userId = await this.usersUseCase.createUser(
+            name,
+            picture,
+            password
+          );
           this.io.emit("create user", name, picture, userId.toString());
           console.log("🙎‍♂️ User created");
         } catch (error) {
@@ -42,12 +46,20 @@ export class SocketController {
           );
         }
       });
-      
+
       //Manejo de solicitudes para crear mensaje
       socket.on("chat message", async (content, userId) => {
         try {
-          const messageId = await this.messageUseCase.createMessage(content, userId);
-          this.io.emit("chat message", content, messageId.toString(), userId.toString());
+          const messageId = await this.messageUseCase.createMessage(
+            content,
+            userId
+          );
+          this.io.emit(
+            "chat message",
+            content,
+            messageId.toString(),
+            userId.toString()
+          );
           console.log("📩 Message created");
         } catch (error) {
           console.error(
@@ -61,24 +73,31 @@ export class SocketController {
         }
       });
 
-      //Reconneccion y recuperacion de mensajes
-      if (!socket.recovered) {
-        try {
-          const lastMessageId = socket.handshake.auth.serverOffset ?? 0;
-          const messages = await this.messageUseCase.getMessagesById(
-            lastMessageId
-          );
-          messages.forEach(({ id, content, user }) => {
-            socket.emit("chat message", content, id.toString(), user.toString());
-          });
-        } catch (error) {
-          console.error(
-          `Ocurrio el siguiente error al intentar recuperar los mensajes => 
+      socket.on("get all messages", async () => {
+        //Reconneccion y recuperacion de mensajes
+        if (!socket.recovered) {
+          try {
+            const lastMessageId = socket.handshake.auth.serverOffset ?? 0;
+            const messages = await this.messageUseCase.getMessagesById(
+              lastMessageId
+            );
+            messages.forEach(({ id, content, user }) => {
+              socket.emit(
+                "chat message",
+                content,
+                id.toString(),
+                user.toString()
+              );
+            });
+          } catch (error) {
+            console.error(
+              `Ocurrio el siguiente error al intentar recuperar los mensajes => 
           \ncontent: ${typeof content}\nid: ${typeof id}\nuser:${typeof user}\n`,
-            error
-          );
+              error
+            );
+          }
         }
-      }
+      });
     });
   }
 }
