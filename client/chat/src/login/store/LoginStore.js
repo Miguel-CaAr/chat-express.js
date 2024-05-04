@@ -4,6 +4,7 @@ import { ref } from "vue";
 
 export default defineStore("loginStore", () => {
   //---------Estados---------//
+  const messagesRef = ref([]);
   const userAuth = ref({
     id: null,
     user: null,
@@ -20,6 +21,7 @@ export default defineStore("loginStore", () => {
 
   return {
     userAuth,
+    messagesRef,
     //Funciones
     assignUserID,
   };

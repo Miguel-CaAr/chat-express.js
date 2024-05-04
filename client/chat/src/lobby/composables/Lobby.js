@@ -3,13 +3,12 @@ import { socket } from "../../services/webSocket.Client.js";
 //----------Store----------//
 import useLoginStore from "../../login/store/LoginStore.js";
 //----------Config----------//
-const { userAuth } = useLoginStore();
+const { userAuth, messagesRef } = useLoginStore();
 
 const getMessages = (container) => {
   socket.emit("get all messages");
   socket.on("chat message", (msg, serverOffset) => {
-    const message = `<li>${msg}</li>`;
-    container.value.insertAdjacentHTML("beforeend", message);
+    messagesRef.push(msg);
     socket.auth.serverOffset = serverOffset;
   });
 };
