@@ -1,7 +1,7 @@
 <template>
-  <NCard class="w-1/5 h-1/2 rounded-lg">
-    <section class="h-full overflow-hidden flex flex-col">
-      <ul class="h-full flex flex-col justify-end items-end scroll-smooth overflow-hidden" ref="messages">
+  <NCard class="w-[400px] h-[560px] rounded-lg">
+    <section class="h-full">
+      <ul class="h-[480px] overflow-auto flex flex-col justify-end items-end scroll-smooth" ref="messages">
         <li v-for="message in messagesRef" class="border rounded-lg p-2 m-2 bg-blue-100">
           {{ message }}
         </li>
